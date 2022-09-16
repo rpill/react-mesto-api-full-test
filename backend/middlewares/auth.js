@@ -4,8 +4,10 @@ const UnauthorizedError = require('../errors/unauthorized-error');
 
 // есть файл middlewares/auth.js, в нём мидлвэр для проверки JWT;
 const auth = (req, res, next) => {
-  // const token = req.cookies.jwt;
   const { authorization } = req.headers;
+  if (!authorization) {
+    return next(new UnauthorizedError('Необходима авторизация'));
+  }
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {
