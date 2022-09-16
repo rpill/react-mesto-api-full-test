@@ -6,8 +6,8 @@
 
 ## Ссылки
 
-IP-адрес: x.x.x.x
+IP-адрес: 84.252.128.189
 
-Frontend: https://...
+Frontend: https://zl.mesto-project.nomoredomains.sbs
 
-Backend: https://...
+Backend: https://api.zl.mesto-project.nomoredomains.sbs
