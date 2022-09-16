@@ -2,11 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const errorHandler = require('./middlewares/error-handler');
 const { DB_ADDRESS } = require('./config');
@@ -24,8 +23,8 @@ mongoose.connect(DB_ADDRESS, {
 app.use(cors());
 
 app.use(helmet()); // Можно лучше: использовать helmet
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(requestLogger); // подключаем логгер запросов до всех обработчиков роутов

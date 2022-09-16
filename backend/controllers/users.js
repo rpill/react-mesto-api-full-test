@@ -32,11 +32,11 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, password, email,
   } = req.body;
-  bcrypt.hash(password, 10)
+  return bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
-    .then((data) => res.status(201).send({ data: data }))
+    .then((data) => res.status(201).send({ data }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));

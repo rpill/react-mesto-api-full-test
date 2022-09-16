@@ -18,37 +18,33 @@ const createCard = (req, res, next) => {
     .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
-      } else {
-        next(err);
+        return next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
       }
+      return next(err);
     });
 };
 
 // DELETE /cards/:cardId
 const deleteCard = (req, res, next) => {
   const { id } = req.params;
-  Card.findById(id)
+  return Card.findById(id)
     .orFail(() => new NotFoundError('Нет карточки по заданному id'))
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {
         // пользователь не может удалить карточку, которую он не создавал
-        next(new ForbiddenError('Нельзя удалить чужую карточку'));
-      } else {
-        return Card.deleteOne(card)
-          .then(() => res.send({ data: card }));
+        return next(new ForbiddenError('Нельзя удалить чужую карточку'));
       }
+      return Card.deleteOne(card)
+        .then(() => res.send({ data: card }));
     })
     .catch(next);
 };
 
 const updateLike = (req, res, next, method) => {
   const { params: { id } } = req;
-  Card.findByIdAndUpdate(id, { [method]: { likes: req.user._id } }, { new: true })
+  return Card.findByIdAndUpdate(id, { [method]: { likes: req.user._id } }, { new: true })
     .orFail(() => new NotFoundError('Нет карточки по заданному id'))
-    .then((card) => {
-      res.send({ data: card });
-    })
+    .then((card) => res.send({ data: card }))
     .catch(next);
 };
 
